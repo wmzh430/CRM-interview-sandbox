@@ -15,9 +15,6 @@ export function processWebhook(store, event) {
   if (!['message.sent', 'message.status_updated'].includes(event.type)) throw new Error('Unsupported event');
   const existing = data.messages.find(m => m.id === event.messageId);
   if (!existing) throw new Error('Unknown message');
-  const prospect = data.prospects.find(p => p.phone === event.externalNumber);
-  if (!prospect) throw new Error('Prospect not found');
-  existing.prospectId = prospect.id;
   existing.status = event.status || existing.status;
   if (typeof event.body === 'string') existing.body = event.body;
   store.write(data);
